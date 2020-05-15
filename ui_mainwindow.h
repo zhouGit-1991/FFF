@@ -51,7 +51,7 @@ public:
     QLabel *label;
     QComboBox *comboBox;
     QLineEdit *lineEdit;
-    QPushButton *pushButton;
+    QPushButton *btSearch;
     QTableWidget *tableWidget_2;
     QWidget *page_2;
     QHBoxLayout *horizontalLayout;
@@ -142,12 +142,12 @@ public:
 
         horizontalLayout_2->addWidget(lineEdit);
 
-        pushButton = new QPushButton(page);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setMinimumSize(QSize(0, 25));
-        pushButton->setMaximumSize(QSize(16777215, 28));
+        btSearch = new QPushButton(page);
+        btSearch->setObjectName(QString::fromUtf8("btSearch"));
+        btSearch->setMinimumSize(QSize(0, 25));
+        btSearch->setMaximumSize(QSize(16777215, 28));
 
-        horizontalLayout_2->addWidget(pushButton);
+        horizontalLayout_2->addWidget(btSearch);
 
         horizontalLayout_2->setStretch(0, 4);
         horizontalLayout_2->setStretch(1, 2);
@@ -241,7 +241,7 @@ public:
         actionOpen->setText(QCoreApplication::translate("MainWindow", "\346\211\223\345\274\200", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "\346\225\260\346\215\256\350\241\250", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "\351\200\211\346\213\251\345\255\227\346\256\265", nullptr));
-        pushButton->setText(QCoreApplication::translate("MainWindow", "\346\235\241\344\273\266\346\237\245\346\211\276", nullptr));
+        btSearch->setText(QCoreApplication::translate("MainWindow", "\346\235\241\344\273\266\346\237\245\346\211\276", nullptr));
         btNewTable->setText(QCoreApplication::translate("MainWindow", "\346\226\260\345\273\272\350\241\250\346\240\274", nullptr));
         btDeleteTable->setText(QCoreApplication::translate("MainWindow", "\345\210\240\351\231\244\350\241\250\346\240\274", nullptr));
         btInsertData->setText(QCoreApplication::translate("MainWindow", "\346\217\222\345\205\245\346\225\260\346\215\256", nullptr));

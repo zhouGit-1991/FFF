@@ -121,7 +121,7 @@ bool sqliteOPERAT::ExcuteSql(string sql , EXSQLTYPE ex_type)
 
 }
 
-bool sqliteOPERAT::selectSql(string clumn,string tableName,map<string,string> condition)
+bool sqliteOPERAT::selectSql(string clumn,string tableName,map<string,string> condition, bool isClear)
 {
     m_res.clear();
     string sql = "SELECT ";
@@ -153,7 +153,14 @@ bool sqliteOPERAT::selectSql(string clumn,string tableName,map<string,string> co
         sql+=")";
     }
     sql+=";";
-    return ExcuteSql(sql);
+    EXSQLTYPE _etype = EXSQLTYPE::EX_INIT;
+    if (!isClear)
+    {
+        _etype = EXSQLTYPE::EX_SAVE;
+        
+    }
+    m_res.clear();
+    return ExcuteSql(sql, _etype);
 }
 
 bool sqliteOPERAT::updateData(string tableName, map<string, string> setValue, map<string, string> condition)

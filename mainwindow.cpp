@@ -306,7 +306,48 @@ void MainWindow::on_btSearch_clicked()
         msgBox.exec();
         return;
     }
+    
+    //将数据更新到tableWidget2里
+
     //更新查找到的表格数据。
+
+    vector<map<string, string>> _vec = m_res;
+    int colCount = 0;
+    if (_vec.size() > 0 && _vec[0].size() > 0)
+    {
+        colCount = _vec[0].size();
+        map<string, string>::iterator _itS = _vec[0].begin();
+
+        while (_itS != _vec[0].end())
+        {
+            m_tableHeadList << QString::fromStdString(_itS->first);
+            ++_itS;
+        }
+        ui->comboBox->clear();
+        ui->comboBox->addItems(m_tableHeadList);
+
+        ui->tableWidget_2->setRowCount(_vec.size());
+        ui->tableWidget_2->setColumnCount(colCount);
+        ui->tableWidget_2->setHorizontalHeaderLabels(m_tableHeadList);
+        for (int i = 0; i < _vec.size(); ++i)
+        {
+            map<string, string>::iterator _it = _vec[i].begin();
+
+            while (_it != _vec[i].end())
+            {
+                QString text = QString::fromStdString(_it->second);
+                int _col = m_tableHeadList.indexOf(QString::fromStdString(_it->first));
+                ui->tableWidget_2->setItem(i, _col, new QTableWidgetItem(text));
+                ++_it;
+            }
+        }
+    }
+    else
+    {
+        ui->tableWidget_2->clear();
+        ui->tableWidget_2->setColumnCount(0);
+        ui->tableWidget_2->setRowCount(0);
+    }
 }
 
 void MainWindow::slotGetNewTableMsg(QString tableName, QString _sql)

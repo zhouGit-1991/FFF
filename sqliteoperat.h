@@ -40,7 +40,7 @@ public:
     //执行指定的sql语句被
     //返回值表示执行后查询的结果数
     //如select函数返回满足条件的个数，0表示没有查询到结果。
-    bool selectSql(string clumn, string tableName, map<string, string> condition);
+    bool selectSql(string clumn, string tableName, map<string, string> condition,bool isClear = true);
 
     //更改数据 tableName 表名，
     //setValue 要更改的map表  key是列名 value是更改值
