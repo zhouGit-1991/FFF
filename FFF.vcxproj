@@ -161,7 +161,7 @@
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <OutputFile>$(OutDir)\FFF.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Link>
     <Midl>
@@ -191,7 +191,6 @@
     <ClCompile Include="insertdatadialog.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
-    <ClCompile Include="newdbdialog.cpp" />
     <ClCompile Include="newtabledialog.cpp" />
     <ClCompile Include="selectdatadialog.cpp" />
     <ClCompile Include="sqliteoperat.cpp" />
@@ -203,8 +202,6 @@
     <QtMoc Include="insertdatadialog.h">
     </QtMoc>
     <QtMoc Include="mainwindow.h">
-    </QtMoc>
-    <QtMoc Include="newdbdialog.h">
     </QtMoc>
     <QtMoc Include="newtabledialog.h">
     </QtMoc>
@@ -238,8 +235,6 @@
     <QtUic Include="insertdatadialog.ui">
     </QtUic>
     <QtUic Include="mainwindow.ui">
-    </QtUic>
-    <QtUic Include="newdbdialog.ui">
     </QtUic>
     <QtUic Include="newtabledialog.ui">
     </QtUic>

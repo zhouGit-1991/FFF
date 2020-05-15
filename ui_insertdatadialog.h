@@ -11,42 +11,75 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_insertDataDialog
 {
 public:
-    QDialogButtonBox *buttonBox;
-    QComboBox *comboBox;
+    QVBoxLayout *verticalLayout;
+    QTableWidget *tableWidget;
+    QHBoxLayout *horizontalLayout;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *pushButton_3;
+    QPushButton *pushButton;
+    QPushButton *pushButton_2;
 
     void setupUi(QDialog *insertDataDialog)
     {
         if (insertDataDialog->objectName().isEmpty())
             insertDataDialog->setObjectName(QString::fromUtf8("insertDataDialog"));
-        insertDataDialog->resize(400, 300);
-        buttonBox = new QDialogButtonBox(insertDataDialog);
-        buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-        buttonBox->setGeometry(QRect(30, 240, 341, 32));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-        comboBox = new QComboBox(insertDataDialog);
-        comboBox->setObjectName(QString::fromUtf8("comboBox"));
-        comboBox->setGeometry(QRect(240, 110, 69, 22));
+        insertDataDialog->resize(668, 508);
+        verticalLayout = new QVBoxLayout(insertDataDialog);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        tableWidget = new QTableWidget(insertDataDialog);
+        tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
+
+        verticalLayout->addWidget(tableWidget);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+        pushButton_3 = new QPushButton(insertDataDialog);
+        pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
+
+        horizontalLayout->addWidget(pushButton_3);
+
+        pushButton = new QPushButton(insertDataDialog);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        horizontalLayout->addWidget(pushButton);
+
+        pushButton_2 = new QPushButton(insertDataDialog);
+        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+
+        horizontalLayout->addWidget(pushButton_2);
+
+
+        verticalLayout->addLayout(horizontalLayout);
+
 
         retranslateUi(insertDataDialog);
-        QObject::connect(buttonBox, SIGNAL(accepted()), insertDataDialog, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), insertDataDialog, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(insertDataDialog);
     } // setupUi
 
     void retranslateUi(QDialog *insertDataDialog)
     {
-        insertDataDialog->setWindowTitle(QCoreApplication::translate("insertDataDialog", "Dialog", nullptr));
+        insertDataDialog->setWindowTitle(QCoreApplication::translate("insertDataDialog", "\346\217\222\345\205\245\346\225\260\346\215\256", nullptr));
+        pushButton_3->setText(QCoreApplication::translate("insertDataDialog", "\346\217\222\345\205\245\344\270\200\350\241\214\346\225\260\346\215\256", nullptr));
+        pushButton->setText(QCoreApplication::translate("insertDataDialog", "\347\241\256\345\256\232", nullptr));
+        pushButton_2->setText(QCoreApplication::translate("insertDataDialog", "\345\217\226\346\266\210", nullptr));
     } // retranslateUi
 
 };

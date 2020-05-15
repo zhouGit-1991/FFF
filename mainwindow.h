@@ -4,10 +4,13 @@
 #include <QMainWindow>
 #include <string>
 #include <vector>
+
+#include <QListWidgetItem>
 #include "sqliteoperat.h"
 
+#include "insertdatadialog.h"
 #include "newtabledialog.h"
-
+#include <QTableWidgetItem>
 
 using namespace std;
 namespace Ui {
@@ -47,6 +50,8 @@ public:
     //查询数据
     void selectData(string, string tableName, map<string, string> _tmap);
 
+
+    //void clearTableWidget();
 public slots:
     void on_actionNew_clicked();
     void on_actionOpen_clicked();
@@ -54,15 +59,22 @@ public slots:
     void on_btDeleteTable_clicked();
     void on_btInsertData_clicked();
     void on_btdeleteData_clicked();
-    void on_btUpdata_clicked();
+    void onbtUpdata(QTableWidgetItem* item);
     void on_btSelectData_clicked();
+    void on_btSearch_clicked();
 
-    void slotGetNewTable(QString tableName,QString _sql);
+
+    void slotGetNewTableMsg(QString tableName,QString _sql);//获取新表信息
+    void slotUpdataTable(QListWidgetItem* item);//更新tableWidget
+    void slotInsertData(const StringMapVec& vec);
+
     
 private:
 
-    QString m_strSsql;
-    QString m_tableName;
+    QStringList m_tableHeadList;//表格的表头
+    QString m_strDbName;
+    QString m_strSsql;//执行sql语句
+    QString m_tableName;//当前的表名
     Ui::MainWindow *ui;
     sqliteOPERAT sql;
 

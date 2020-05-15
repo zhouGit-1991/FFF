@@ -3,19 +3,33 @@
 vector<map<string,string>> m_res;
 static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
+    //默认T 保存F 初始化A
     cout<<"call back"<<endl;
-    if(NotUsed == "T")
+    char _charP[2] = "\0";
+    strcpy(_charP, (char*)NotUsed);
+    if(_charP == "T")
     {
         m_res.clear();
     }
 
+    map<string, string> _map;
     for(int i=0; i<argc; i++)
     {
-        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-        map<string, string> _map;
-        _map[azColName[i]] = argv[i];
-        m_res.push_back(_map);
+        printf("%s = %s   NotUsed = %s\n   ", azColName[i], argv[i] ? argv[i] : "NULL", NotUsed? (char*)NotUsed:"NULL");
+        _map[azColName[i]] = argv[i] ? argv[i] : "NULL";
+        int _v = strcmp(_charP, "A");
+        if (0 == _v )
+        {
+            continue;
+        }
+        
    }
+    /*if (0 == strcmp(_charP, "A"))
+    {
+        m_res.push_back(_map);
+    }*/
+    m_res.push_back(_map);
+    _map.clear();
    return 0;
 }
 
@@ -51,6 +65,7 @@ bool sqliteOPERAT::createTable(string tableName, string createData)
 bool sqliteOPERAT::openDB(string dbName)
 {
     int rc;
+    m_res.clear();
     rc = sqlite3_open_v2(dbName.c_str(), &m_pDB,SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE,NULL);
     if(rc )
     {
@@ -59,8 +74,6 @@ bool sqliteOPERAT::openDB(string dbName)
         m_isOpen = false;
         return false;
     }
-     cout << m_strErr<<" openDB Err "<< sqlite3_errmsg(m_pDB)<<endl;
-
     m_strErr.clear();
     m_isOpen = true;
 
@@ -76,18 +89,25 @@ bool sqliteOPERAT::closeDB()
     return false;
 }
 
-bool sqliteOPERAT::ExcuteSql(string sql ,bool isDelete)
+bool sqliteOPERAT::ExcuteSql(string sql , EXSQLTYPE ex_type)
 {
     char* zErrMsg;
     char* _arg = new char[2];
-    if (isDelete)
+    switch (ex_type)
     {
+    case EX_INIT:
         strcpy(_arg, "T");
-    }
-    else
-    {
+        break;
+    case EX_SAVE:
         strcpy(_arg, "F");
+        break;
+    case EX_ATTR:
+        strcpy(_arg, "A");
+        break;
+    default:
+        break;
     }
+   
     
     cout <<"\n sqliteOPERAT::ExcuteSql sql =   "<<sql<<endl;
     int rc = sqlite3_exec(m_pDB, sql.c_str(), callback, _arg, &zErrMsg);
@@ -232,13 +252,12 @@ vector<string> sqliteOPERAT::getDataBaseAllTables()
     char**dbNames=NULL;
     int row,col;
     string sql = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name";
-    int result = sqlite3_get_table( m_pDB,sql.c_str(),&dbNames,&row,&col,&szError);
+    int result = sqlite3_get_table( m_pDB,sql.c_str(),&dbNames,&row,&col,&szError);//这个方法可能有问题但是还不确定
     //dbResult就是查道询结果，row和col分别是返回结果集的行数（回包含表头）和列数
     if( szError )
     {
         m_strErr = szError;
         sqlite3_free(szError);
-
         return vec;
      }
     else
@@ -256,9 +275,27 @@ vector<string> sqliteOPERAT::getDataBaseAllTables()
             ++i;
         }
     }
-    std::cout<<"eee"<<endl;
+  
     return vec;
 
+}
+
+vector<map<string, string>> sqliteOPERAT::getTableAttributeByName(string tableName)
+{
+    m_res.clear();
+    
+    string sql = "PRAGMA  table_info(\""+ tableName+"\");";
+    ExcuteSql(sql, EXSQLTYPE::EX_ATTR);
+    return m_res;
+}
+
+vector<map<string, string>> sqliteOPERAT::getDataBytable(string tableName)
+{
+    string sql = "SELECT * FROM " + tableName + " ;";
+    m_res.clear();
+    ExcuteSql(sql, EXSQLTYPE::EX_SAVE);
+
+    return m_res;
 }
 
 bool sqliteOPERAT::deleteData(string tableName, map<string, string> condition)

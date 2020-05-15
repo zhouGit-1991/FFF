@@ -8,6 +8,13 @@
 #include <string>
 using namespace std;
 
+enum EXSQLTYPE
+{
+    EX_INIT = 0,//默认值
+    EX_SAVE,//不删除之前的字段
+    EX_ATTR//查询表格字段名称和类型用的
+
+};
 
 class sqliteOPERAT
 {
@@ -28,7 +35,7 @@ public:
     //执行指定的sql语句被
     //返回值表示执行后查询的结果数
     //如select函数返回满足条件的个数，0表示没有查询到结果。
-    bool ExcuteSql(string sql, bool isDelete = true);
+    bool ExcuteSql(string sql, EXSQLTYPE ex_type = EX_INIT);
 
     //执行指定的sql语句被
     //返回值表示执行后查询的结果数
@@ -43,7 +50,15 @@ public:
     //增加数据：tableName 表名，insertValue是增加数据的列值map表，
     bool insertData(string tableName, map<string, string> insertValue);
 
+    //获取所有的表格名称
     vector<string> getDataBaseAllTables();
+
+    //根据表名称获取表的所有字段及类型
+    vector<map<string,string>> getTableAttributeByName(string tableName);
+
+    //根据表格名称获取表格中的数据
+    vector<map<string, string>> getDataBytable(string tableName);
+
 
     //删除表中的数据
     //condition是删除条件的map表，key是列名 value是限定条件列的值。

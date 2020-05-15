@@ -3,18 +3,31 @@
 #include <QTableWidget>
 #include <iostream>
 #include <QStringList>
+#include <QDebug>
 newTableDialog::newTableDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::newTableDialog)
 {
+    
     ui->setupUi(this);
-
-
-
+    ui->tableWidget->setRowCount(1);
+    QTableWidgetItem* item0 = new QTableWidgetItem("UUID");
+    item0->setFlags(Qt::ItemIsEditable);
+    
+    QComboBox* box = new QComboBox;
+    QStringList _list;
+    _list << "TEXT";
+    box->addItems(_list);
+    
+    ui->tableWidget->setItem(0, 0, item0);
+    ui->tableWidget->setCellWidget(0, 1, box);
+    
+    
 }
 
 newTableDialog::~newTableDialog()
 {
+    qDebug() << "newTableDialog::~newTableDialog()";
     delete ui;
 }
 

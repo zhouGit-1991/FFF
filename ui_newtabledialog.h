@@ -114,7 +114,7 @@ public:
 
     void retranslateUi(QDialog *newTableDialog)
     {
-        newTableDialog->setWindowTitle(QCoreApplication::translate("newTableDialog", "Dialog", nullptr));
+        newTableDialog->setWindowTitle(QCoreApplication::translate("newTableDialog", "\346\226\260\345\273\272\350\241\250\346\240\274", nullptr));
         label->setText(QCoreApplication::translate("newTableDialog", "\346\267\273\345\212\240\350\241\250\346\240\274\345\220\215\347\247\260", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("newTableDialog", "\345\255\227\346\256\265\345\220\215\347\247\260", nullptr));
