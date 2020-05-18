@@ -367,13 +367,13 @@ void MainWindow::slotUpdataTable(QListWidgetItem* item)
     QString tableName = item? item->text(): m_tableName;
     m_tableName = tableName;
     vector<map<string,string>> _vec = sql.getDataBytable(tableName.toStdString());
-
+    
     int colCount = 0;
     if (_vec.size() > 0 && _vec[0].size() > 0)
     {
         colCount = _vec[0].size();
         map<string, string>::iterator _itS = _vec[0].begin();
-
+        m_tableHeadList.clear();
         while (_itS != _vec[0].end())
         {
             m_tableHeadList << QString::fromStdString(_itS->first);
