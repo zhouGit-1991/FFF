@@ -28,8 +28,6 @@ public:
     //打开数据库
     void openDB(string dbName);
 
-
-
     //创建数据库
     void createDB(string dbName);
 
@@ -50,33 +48,38 @@ public:
     //查询数据
     void selectData(string, string tableName, map<string, string> _tmap);
 
-
-    //void clearTableWidget();
+private:
+    void showMsg(QString msg);
 public slots:
-    void on_actionNew_clicked();
-    void on_actionOpen_clicked();
-    void on_btNewTable_clicked();
-    void on_btDeleteTable_clicked();
-    void on_btInsertData_clicked();
-    void on_btdeleteData_clicked();
-    void onbtUpdata(QTableWidgetItem* item);
-    void on_btSelectData_clicked();
+    void on_actionNew_clicked();//新建数据库菜单
+    void on_actionOpen_clicked();//大开数据库菜单
+    void on_btNewTable_clicked();//新建表格
+    void on_btDeleteTable_clicked();//删除表格被按下
+    void on_btInsertData_clicked();//插入按钮按下，弹出插入数据的界面
+    void on_btdeleteData_clicked();//删除一行数据
+    void on_lockButton_clicked();//锁定按钮被按下事件，用来切换是否允许修改表格内容的事件
+    void onbtUpdata(QTableWidgetItem* item);//更改表格数据
+    
+    
     void on_btSearch_clicked();
 
-
+    void itemDoubleClicked();//双击表格中的数据
     void slotGetNewTableMsg(QString tableName,QString _sql);//获取新表信息
     void slotUpdataTable(QListWidgetItem* item);//更新tableWidget
     void slotInsertData(const StringMapVec& vec);
 
     
+    
 private:
-
+    bool m_allowChangeTable;
     QStringList m_tableHeadList;//表格的表头
     QString m_strDbName;
     QString m_strSsql;//执行sql语句
     QString m_tableName;//当前的表名
     Ui::MainWindow *ui;
     sqliteOPERAT sql;
+
+    bool isConnect = false;
 
 
 };

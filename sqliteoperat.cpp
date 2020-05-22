@@ -1,10 +1,10 @@
 #include "sqliteoperat.h"
 //#include 
-vector<map<string,string>> m_res;
+vector<map<string,string>> m_res;//有多个查找结果时
 static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
     //默认T 保存F 初始化A
-    cout<<"call back"<<endl;
+    //cout<<"call back"<<endl;
     char _charP[2] = "\0";
     strcpy(_charP, (char*)NotUsed);
     if(_charP == "T")
@@ -15,7 +15,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
     map<string, string> _map;
     for(int i=0; i<argc; i++)
     {
-        printf("%s = %s   NotUsed = %s\n   ", azColName[i], argv[i] ? argv[i] : "NULL", NotUsed? (char*)NotUsed:"NULL");
+        //printf("%s = %s   NotUsed = %s\n   ", azColName[i], argv[i] ? argv[i] : "NULL", NotUsed? (char*)NotUsed:"NULL");
         _map[azColName[i]] = argv[i] ? argv[i] : "NULL";
         int _v = strcmp(_charP, "A");
         if (0 == _v )
@@ -24,10 +24,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
         }
         
    }
-    /*if (0 == strcmp(_charP, "A"))
-    {
-        m_res.push_back(_map);
-    }*/
+
     m_res.push_back(_map);
     _map.clear();
    return 0;
@@ -166,10 +163,6 @@ bool sqliteOPERAT::selectSql(string clumn,string tableName,map<string,string> co
 bool sqliteOPERAT::updateData(string tableName, map<string, string> setValue, map<string, string> condition)
 {
 
-    /*
-sql = "UPDATE COMPANY set SALARY = 25000.00 where ID=1; "
-
-*/
     if(setValue.size() == 0)
     {
         m_strErr = " update Data is Empty";
@@ -259,32 +252,19 @@ vector<string> sqliteOPERAT::getDataBaseAllTables()
     char**dbNames=NULL;
     int row,col;
     string sql = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name";
-    int result = sqlite3_get_table( m_pDB,sql.c_str(),&dbNames,&row,&col,&szError);//这个方法可能有问题但是还不确定
-    //dbResult就是查道询结果，row和col分别是返回结果集的行数（回包含表头）和列数
-    if( szError )
-    {
-        m_strErr = szError;
-        sqlite3_free(szError);
-        return vec;
-     }
-    else
-    {
-        int i = 0;
-        while(*dbNames)
-        {
-            if(0 < i)
-            {
-                cout<<i<<endl;
-                cout<< *dbNames<<endl;
-                vec.push_back(string(*dbNames));
-            }
-            ++dbNames;
-            ++i;
-        }
-    }
-  
-    return vec;
 
+    //替代方法：
+    m_res.clear();
+    if (!ExcuteSql(sql, EXSQLTYPE::EX_SAVE))
+    {
+        return vec;
+    }
+    for (int i = 0; i < m_res.size(); ++i)
+    {
+        map<string, string>::iterator _it = m_res[i].begin();
+        vec.push_back(_it->second);
+    }
+    return vec;
 }
 
 vector<map<string, string>> sqliteOPERAT::getTableAttributeByName(string tableName)
@@ -298,6 +278,10 @@ vector<map<string, string>> sqliteOPERAT::getTableAttributeByName(string tableNa
 
 vector<map<string, string>> sqliteOPERAT::getDataBytable(string tableName)
 {
+    if (tableName.empty())
+    {
+        return vector<map<string, string>>();
+    }
     string sql = "SELECT * FROM " + tableName + " ;";
     m_res.clear();
     ExcuteSql(sql, EXSQLTYPE::EX_SAVE);
@@ -345,16 +329,3 @@ string sqliteOPERAT::getErr()
 {
     return m_strErr;
 }
-
-//map<string, string> sqliteOPERAT::getResult()
-//{
-//    map<string, string>::iterator _it = m_res.begin();
-//
-//    while(_it!=m_res.end())
-//    {
-//        cout<<_it->first<<"  "<<_it->second;
-//        _it++;
-//    }
-//    cout <<endl;
-//    return m_res;
-//}

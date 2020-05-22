@@ -5,16 +5,21 @@
 
 #include <QFileDialog>
 #include <QMapIterator>
+#include <QSharedPointer>
 extern vector<map<string,string>> m_res;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_allowChangeTable(false)
 {
     ui->setupUi(this);
     connect(ui->actionOpen,&QAction::triggered,this,&MainWindow::on_actionOpen_clicked);
     connect(ui->actionNew,&QAction::triggered,this,&MainWindow::on_actionNew_clicked);
     connect(ui->listWidget, &QListWidget::itemClicked, this, &MainWindow::slotUpdataTable);
-    connect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+
+    connect(ui->tableWidget_2, &QTableWidget::doubleClicked, this, &MainWindow::itemDoubleClicked);
+    //connect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+    ui->tableWidget_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 MainWindow::~MainWindow()
@@ -24,10 +29,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::openDB(string dbName)
 {
+    slotUpdataTable(NULL);
+    sql.closeDB();
     if(!sql.openDB(dbName))
     {
-        QMessageBox msgBox;
-        msgBox.setText(QString::fromStdString(sql.getErr()));
+        showMsg(QString::fromStdString(sql.getErr()));
     }
     else
     {
@@ -41,23 +47,13 @@ void MainWindow::openDB(string dbName)
         text = text.right(text.length() - text.lastIndexOf('/')-1);
         setWindowTitle(text);
         m_res.clear();
-        sql.ExcuteSql( "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;",EXSQLTYPE::EX_SAVE);
-        for (int i = 0; i < m_res.size(); ++i)
+        //查找数据库中的表格数量
+        vector<string> vec = sql.getDataBaseAllTables();
+        for (int i = 0; i < vec.size(); ++i)
         {
-            
-            map<string, string>::iterator _it = m_res[i].begin();
-            for (; _it != m_res[i].end();)
-            {
-                ui->listWidget->addItem(QString::fromStdString(_it->second));
-                ++_it;
-            }
-
+            ui->listWidget->addItem(QString::fromStdString(vec[i]));
         }
-
-        
-
     }
-
 
 }
 
@@ -65,15 +61,12 @@ void MainWindow::createTable(string tableName,string createData)
 {
     if(!sql.createTable(tableName,createData/*"姓名 text,性别 text"*/))
     {
-        QMessageBox msgBox;
-        msgBox.setText(QString::fromStdString((sql.getErr())));
-        msgBox.exec();
+        
+        showMsg(QString::fromStdString((sql.getErr())));        
         return;
     }
 
-    QMessageBox msgBox;
-    msgBox.setText("sucess create Table");
-    msgBox.exec();
+    showMsg("sucess create Table");
     openDB(m_strDbName.toStdString());
 
 }
@@ -84,9 +77,7 @@ void MainWindow::createDB(string dbName)
 {
     if(!sql.openDB(dbName))
     {
-        QMessageBox msgBox;
-        msgBox.setText(QString::fromStdString(sql.getErr()));
-        msgBox.exec();
+        showMsg(QString::fromStdString(sql.getErr()));
     }
 }
 
@@ -94,9 +85,7 @@ void MainWindow::deleteTable(string tableName)
 {
     if(!sql.deleteTable(tableName))
     {
-        QMessageBox msgBox;
-        msgBox.setText(QString::fromStdString(sql.getErr()));
-        msgBox.exec();
+        showMsg(QString::fromStdString(sql.getErr()));
     }
 }
 
@@ -104,9 +93,7 @@ void MainWindow::insertData(string tableName, map<string,string> insertMap)
 {
     if(!sql.insertData(tableName,insertMap))
     {
-        QMessageBox msgBox;
-        msgBox.setText(QString::fromStdString(sql.getErr()));
-        msgBox.exec();
+        showMsg(QString::fromStdString(sql.getErr()));
     }
 }
 
@@ -114,9 +101,7 @@ void MainWindow::deleteData(string tableName, map<string,string> deleteMap)
 {
     if(!sql.deleteData(tableName,deleteMap))
     {
-        QMessageBox msgBox;
-        msgBox.setText(QString::fromStdString(sql.getErr()));
-        msgBox.exec();
+        showMsg(QString::fromStdString(sql.getErr()));
     }
 }
 
@@ -124,15 +109,27 @@ void MainWindow::selectData(string clumn,string tableName,map<string,string> _tm
 {
     if(!sql.selectSql(clumn,tableName,_tmap))
     {
-        QMessageBox msgBox;
-        msgBox.setText(QString::fromStdString(sql.getErr()));
-        msgBox.exec();
+        showMsg(QString::fromStdString(sql.getErr()));
     }
 
 }
 
+void MainWindow::showMsg(QString msg)
+{
+    
+    QMessageBox msgBox;
+    msgBox.setText(msg);
+    msgBox.exec();
+}
+
 void MainWindow::on_actionNew_clicked()
 {
+    if (isConnect)
+    {
+        disconnect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+        isConnect = false;
+    }
+    
     QString fileName = QFileDialog::getSaveFileName(this,
             tr("New Config"),
             "",
@@ -140,9 +137,8 @@ void MainWindow::on_actionNew_clicked()
 
         if (fileName.isEmpty())
         {
-            QMessageBox msgBox;
-            msgBox.setText(QString("新建的数据库不合法!"));
-            msgBox.exec();
+            showMsg(QString::fromLocal8Bit("新建的数据库不合法!"));
+            
            return;
         }
         else
@@ -151,21 +147,14 @@ void MainWindow::on_actionNew_clicked()
         }
 }
 
-//void MainWindow::clearTableWidget()
-//{
-//    int _rowCount = ui->tableWidget_2->rowCount();//行数
-//    int _rowCount = ui->tableWidget_2->columnCount();//列数
-//    for (int i = 0; i < _rowCount; ++i)
-//    {
-//        for(int j = 0;)
-//        ui->tableWidget_2->takeItem(0, 0);
-//        
-//    }
-//}
 
 void MainWindow::on_actionOpen_clicked()
 {
-
+    if (isConnect)
+    {
+        disconnect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+        isConnect = false;
+    }
     m_strDbName = QFileDialog::getOpenFileName(this,
             tr("Open File"),
             "",
@@ -183,12 +172,17 @@ void MainWindow::on_actionOpen_clicked()
 
 void MainWindow::on_btNewTable_clicked()
 {
+    if (isConnect)
+    {
+        disconnect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+        isConnect = false;
+    }
     if(!sql.isOpen())
     {
-        QMessageBox msgBox;
-        msgBox.setText(QString("数据库没有打开!"));
-        msgBox.exec();
-        //return;
+       
+        showMsg(QString("数据库没有打开!"));
+        return;
+
     }
     newTableDialog *dialog = new newTableDialog;
     dialog->show();
@@ -201,6 +195,11 @@ void MainWindow::on_btNewTable_clicked()
 void MainWindow::on_btDeleteTable_clicked()
 {
     //删除表格：
+    if (isConnect)
+    {
+        disconnect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+        isConnect = false;
+    }
     
     if(ui->listWidget->currentItem())
     {
@@ -217,7 +216,11 @@ void MainWindow::on_btInsertData_clicked()
 {
     //首先获取数据库表 获取表的类型和字段
     
-    
+    if (isConnect)
+    {
+        disconnect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+        isConnect = false;
+    }
     QStringList _tableHeadList;
     if (ui->listWidget->currentItem())
     {
@@ -263,12 +266,44 @@ void MainWindow::on_btInsertData_clicked()
 
 void MainWindow::on_btdeleteData_clicked()
 {
+    if (isConnect)
+    {
+        disconnect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+        isConnect = false;
+    }
+    if (!ui->tableWidget_2->currentItem())
+    {
+        return;
+    }
     int row = ui->tableWidget_2->row(ui->tableWidget_2->currentItem());
     map<string, string> _map;
     _map["UUID"] = ui->tableWidget_2->item(row, 0)->text().toStdString();
     sql.deleteData(m_tableName.toStdString(), _map);
     slotUpdataTable(NULL);
     
+}
+
+void MainWindow::on_lockButton_clicked()
+{
+    QAbstractItemView::EditTriggers ediTriger = ui->tableWidget_2->editTriggers();
+    int i = 0;
+    if (m_allowChangeTable)
+    {
+        m_allowChangeTable = !m_allowChangeTable;
+        ui->lockButton->setStyleSheet("background-color: rgb(255, 50, 50);");
+        ui->lockButton->setText("解锁表格");
+        ui->tableWidget_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    }
+    else
+    {
+
+        
+        m_allowChangeTable = !m_allowChangeTable;
+        ui->lockButton->setStyleSheet("background-color: rgb(85, 255, 0);");
+        ui->lockButton->setText("锁定表格");
+        
+        ui->tableWidget_2->setEditTriggers(QAbstractItemView::DoubleClicked| QAbstractItemView::SelectedClicked | QAbstractItemView::EditKeyPressed);
+    }
 }
 
 void MainWindow::onbtUpdata(QTableWidgetItem* item)
@@ -288,12 +323,13 @@ void MainWindow::onbtUpdata(QTableWidgetItem* item)
     sql.updateData(m_tableName.toStdString(), setValueMap, conditionMap);
 }
 
-void MainWindow::on_btSelectData_clicked()
-{
-}
-
 void MainWindow::on_btSearch_clicked()
 {
+    if (isConnect)
+    {
+        disconnect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+        isConnect = false;
+    }
     //条件查找目前界面支持一个字段
     QString _conditionKey = ui->comboBox->currentText();
     QString _conditionValue = ui->lineEdit->text();
@@ -301,9 +337,7 @@ void MainWindow::on_btSearch_clicked()
     _map[_conditionKey.toStdString()] = _conditionValue.toStdString();
     if (!sql.selectSql("", m_tableName.toStdString(), _map))
     {
-        QMessageBox msgBox;
-        msgBox.setText(QString("数据库没有打开!"));
-        msgBox.exec();
+        showMsg(QString("数据库没有打开!"));       
         return;
     }
     
@@ -350,6 +384,16 @@ void MainWindow::on_btSearch_clicked()
     }
 }
 
+void MainWindow::itemDoubleClicked()
+{
+    if (!isConnect)
+    {
+        connect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+        isConnect = true;
+    }
+    
+}
+
 void MainWindow::slotGetNewTableMsg(QString tableName, QString _sql)
 {
     m_strSsql = _sql;
@@ -363,9 +407,15 @@ void MainWindow::slotGetNewTableMsg(QString tableName, QString _sql)
 void MainWindow::slotUpdataTable(QListWidgetItem* item)
 {
     //获取表名称   显示表的信息
-
+    m_tableName.clear();
+    if (isConnect)
+    {
+        disconnect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
+        isConnect = false;
+    }
+    
     QString tableName = item? item->text(): m_tableName;
-    m_tableName = tableName;
+
     vector<map<string,string>> _vec = sql.getDataBytable(tableName.toStdString());
     
     int colCount = 0;
@@ -427,6 +477,3 @@ void MainWindow::slotInsertData(const StringMapVec& vec)
     dia->deleteLater();
     slotUpdataTable(NULL);
 }
-
-
-

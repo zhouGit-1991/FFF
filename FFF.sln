@@ -7,6 +7,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FFF", "FFF.vcxproj", "{58D4
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite3", "..\..\sqlite3\sqlite3\sqlite3.vcxproj", "{6349FECF-A040-439B-8639-F002A6ED0AAC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QtsqlT", "..\QtsqlT\QtsqlT.vcxproj", "{348E36A0-D4A7-4369-AA40-6A97F3F650BB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mines", "..\third_project\mines.vcxproj", "{23F4F476-2A66-3D43-9CC3-C8F757EA9B87}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "..\Test\Test.vcxproj", "{7ECF7F23-1FA8-4DC3-B338-DB3B9C3AF7F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -21,6 +27,18 @@ Global
 		{6349FECF-A040-439B-8639-F002A6ED0AAC}.Debug|x86.Build.0 = Debug|Win32
 		{6349FECF-A040-439B-8639-F002A6ED0AAC}.Release|x86.ActiveCfg = Release|Win32
 		{6349FECF-A040-439B-8639-F002A6ED0AAC}.Release|x86.Build.0 = Release|Win32
+		{348E36A0-D4A7-4369-AA40-6A97F3F650BB}.Debug|x86.ActiveCfg = Debug|Win32
+		{348E36A0-D4A7-4369-AA40-6A97F3F650BB}.Debug|x86.Build.0 = Debug|Win32
+		{348E36A0-D4A7-4369-AA40-6A97F3F650BB}.Release|x86.ActiveCfg = Release|Win32
+		{348E36A0-D4A7-4369-AA40-6A97F3F650BB}.Release|x86.Build.0 = Release|Win32
+		{23F4F476-2A66-3D43-9CC3-C8F757EA9B87}.Debug|x86.ActiveCfg = Debug|Win32
+		{23F4F476-2A66-3D43-9CC3-C8F757EA9B87}.Debug|x86.Build.0 = Debug|Win32
+		{23F4F476-2A66-3D43-9CC3-C8F757EA9B87}.Release|x86.ActiveCfg = Release|Win32
+		{23F4F476-2A66-3D43-9CC3-C8F757EA9B87}.Release|x86.Build.0 = Release|Win32
+		{7ECF7F23-1FA8-4DC3-B338-DB3B9C3AF7F0}.Debug|x86.ActiveCfg = Debug|Win32
+		{7ECF7F23-1FA8-4DC3-B338-DB3B9C3AF7F0}.Debug|x86.Build.0 = Debug|Win32
+		{7ECF7F23-1FA8-4DC3-B338-DB3B9C3AF7F0}.Release|x86.ActiveCfg = Release|Win32
+		{7ECF7F23-1FA8-4DC3-B338-DB3B9C3AF7F0}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

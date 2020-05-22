@@ -60,6 +60,7 @@ public:
     QPushButton *btDeleteTable;
     QPushButton *btInsertData;
     QPushButton *btdeleteData;
+    QPushButton *lockButton;
     QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QMenu *menu;
@@ -203,6 +204,13 @@ public:
 
         verticalLayout->addWidget(btdeleteData);
 
+        lockButton = new QPushButton(centralWidget);
+        lockButton->setObjectName(QString::fromUtf8("lockButton"));
+        lockButton->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 50, 50);\n"
+""));
+
+        verticalLayout->addWidget(lockButton);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -246,6 +254,7 @@ public:
         btDeleteTable->setText(QCoreApplication::translate("MainWindow", "\345\210\240\351\231\244\350\241\250\346\240\274", nullptr));
         btInsertData->setText(QCoreApplication::translate("MainWindow", "\346\217\222\345\205\245\346\225\260\346\215\256", nullptr));
         btdeleteData->setText(QCoreApplication::translate("MainWindow", "\345\210\240\351\231\244\346\225\260\346\215\256", nullptr));
+        lockButton->setText(QCoreApplication::translate("MainWindow", "\350\247\243\351\224\201\350\241\250\346\240\274", nullptr));
         menu->setTitle(QCoreApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
     } // retranslateUi
 

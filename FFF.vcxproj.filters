@@ -37,9 +37,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="insertdatadialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -58,14 +55,8 @@
     <ClCompile Include="sqliteoperat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="updatadialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="dialog.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="insertdatadialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -81,9 +72,6 @@
     <ClInclude Include="sqliteoperat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <QtMoc Include="updatadialog.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -94,9 +82,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="dialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtUic Include="insertdatadialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
@@ -107,9 +92,6 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="selectdatadialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="updatadialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

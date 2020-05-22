@@ -187,18 +187,14 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="dialog.cpp" />
     <ClCompile Include="insertdatadialog.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="newtabledialog.cpp" />
     <ClCompile Include="selectdatadialog.cpp" />
     <ClCompile Include="sqliteoperat.cpp" />
-    <ClCompile Include="updatadialog.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="dialog.h">
-    </QtMoc>
     <QtMoc Include="insertdatadialog.h">
     </QtMoc>
     <QtMoc Include="mainwindow.h">
@@ -208,8 +204,6 @@
     <QtMoc Include="selectdatadialog.h">
     </QtMoc>
     <ClInclude Include="sqliteoperat.h" />
-    <QtMoc Include="updatadialog.h">
-    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -230,8 +224,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="dialog.ui">
-    </QtUic>
     <QtUic Include="insertdatadialog.ui">
     </QtUic>
     <QtUic Include="mainwindow.ui">
@@ -239,8 +231,6 @@
     <QtUic Include="newtabledialog.ui">
     </QtUic>
     <QtUic Include="selectdatadialog.ui">
-    </QtUic>
-    <QtUic Include="updatadialog.ui">
     </QtUic>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
