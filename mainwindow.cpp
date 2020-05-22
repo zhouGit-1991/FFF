@@ -29,6 +29,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::openDB(string dbName)
 {
+    m_tableName.clear();
     slotUpdataTable(NULL);
     sql.closeDB();
     if(!sql.openDB(dbName))
@@ -407,7 +408,7 @@ void MainWindow::slotGetNewTableMsg(QString tableName, QString _sql)
 void MainWindow::slotUpdataTable(QListWidgetItem* item)
 {
     //获取表名称   显示表的信息
-    m_tableName.clear();
+    //m_tableName.clear();
     if (isConnect)
     {
         disconnect(ui->tableWidget_2, &QTableWidget::itemChanged, this, &MainWindow::onbtUpdata);
@@ -415,6 +416,7 @@ void MainWindow::slotUpdataTable(QListWidgetItem* item)
     }
     
     QString tableName = item? item->text(): m_tableName;
+    m_tableName = tableName;
 
     vector<map<string,string>> _vec = sql.getDataBytable(tableName.toStdString());
     

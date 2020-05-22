@@ -246,6 +246,7 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionNew"/>
+    <addaction name="action_pdf"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -265,6 +266,11 @@
   <action name="actionOpen">
    <property name="text">
     <string>打开</string>
+   </property>
+  </action>
+  <action name="action_pdf">
+   <property name="text">
+    <string>保存当前表格为pdf文件</string>
    </property>
   </action>
  </widget>

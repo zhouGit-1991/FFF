@@ -8,6 +8,7 @@
 #include <string>
 using namespace std;
 
+extern vector<map<string, string>> m_res;
 enum EXSQLTYPE
 {
     EX_INIT = 0,//默认值
@@ -75,9 +76,9 @@ public:
 
     bool isOpen(){ return m_isOpen;}
 private:
-    bool m_isOpen;
-    string m_strErr;
-    sqlite3 *m_pDB;
+    bool m_isOpen;//数据库是否打开
+    string m_strErr;//错误信息
+    sqlite3 *m_pDB;//当前数据库
 
 };
 

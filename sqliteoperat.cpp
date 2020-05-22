@@ -1,6 +1,7 @@
 #include "sqliteoperat.h"
 //#include 
-vector<map<string,string>> m_res;//有多个查找结果时
+vector<map<string, string>> m_res;//有多个查找结果时
+
 static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
     //默认T 保存F 初始化A

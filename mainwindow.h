@@ -52,7 +52,7 @@ private:
     void showMsg(QString msg);
 public slots:
     void on_actionNew_clicked();//新建数据库菜单
-    void on_actionOpen_clicked();//大开数据库菜单
+    void on_actionOpen_clicked();//打开数据库菜单
     void on_btNewTable_clicked();//新建表格
     void on_btDeleteTable_clicked();//删除表格被按下
     void on_btInsertData_clicked();//插入按钮按下，弹出插入数据的界面
